@@ -18,8 +18,21 @@
                 "source": false
               }
             }
+          },
+          {
+            "id": "e2ea2832c9138434",
+            "type": "leaf",
+            "state": {
+              "type": "markdown",
+              "state": {
+                "file": "README.md",
+                "mode": "source",
+                "source": false
+              }
+            }
           }
-        ]
+        ],
+        "currentTab": 1
       }
     ],
     "direction": "vertical"
@@ -85,7 +98,7 @@
             "state": {
               "type": "backlink",
               "state": {
-                "file": "Linux Fundamentals/Cheat Sheet.md",
+                "file": "README.md",
                 "collapseAll": false,
                 "extraContext": false,
                 "sortOrder": "alphabetical",
@@ -102,7 +115,7 @@
             "state": {
               "type": "outgoing-link",
               "state": {
-                "file": "Linux Fundamentals/Cheat Sheet.md",
+                "file": "README.md",
                 "linksCollapsed": false,
                 "unlinkedCollapsed": true
               }
@@ -125,7 +138,7 @@
             "state": {
               "type": "outline",
               "state": {
-                "file": "Linux Fundamentals/Cheat Sheet.md"
+                "file": "README.md"
               }
             }
           }
@@ -146,10 +159,11 @@
       "command-palette:Open command palette": false
     }
   },
-  "active": "2997d35e6b43985d",
+  "active": "0d5efbf75713799e",
   "lastOpenFiles": [
-    "Untitled.canvas",
     "Linux Fundamentals/Cheat Sheet.md",
+    "README.md",
+    "Untitled.canvas",
     "ZZImages",
     "ZZImages/Pasted image 20240826122907.png",
     "Linux Fundamentals/Vim.md",
