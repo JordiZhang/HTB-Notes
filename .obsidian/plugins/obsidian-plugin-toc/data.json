@@ -1,6 +1,6 @@
 {
   "minimumDepth": 1,
-  "maximumDepth": 6,
+  "maximumDepth": 5,
   "listStyle": "bullet",
   "useMarkdown": false
 }
