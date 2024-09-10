@@ -1,16 +1,32 @@
 {
   "recentFiles": [
     {
-      "basename": "Network Enumeration with Nmap",
-      "path": "Basic Toolkit/Network Enumeration with Nmap.md"
+      "basename": "02. Windows Fundamentals",
+      "path": "Information Security Foundations/02. Windows Fundamentals.md"
     },
     {
-      "basename": "Cheat Sheet",
-      "path": "Linux Fundamentals/Cheat Sheet.md"
+      "basename": "Network Enumeration with Nmap",
+      "path": "CPTS/Network Enumeration with Nmap.md"
+    },
+    {
+      "basename": "01. Linux Fundamentals",
+      "path": "Information Security Foundations/01. Linux Fundamentals.md"
+    },
+    {
+      "basename": "Configure Prompt",
+      "path": "Setting Up/Configure Prompt.md"
+    },
+    {
+      "basename": "Start-up List",
+      "path": "Setting Up/Start-up List.md"
+    },
+    {
+      "basename": "Logging",
+      "path": "Setting Up/Logging.md"
     },
     {
       "basename": "Vim",
-      "path": "Linux Fundamentals/Vim.md"
+      "path": "Vim.md"
     }
   ],
   "omittedPaths": []

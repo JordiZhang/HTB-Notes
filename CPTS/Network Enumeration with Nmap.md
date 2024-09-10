@@ -4,7 +4,6 @@
 	- [[#Introduction to Nmap#Syntax|Syntax]]
 - [[#Host Discovery|Host Discovery]]
 	- [[#Host Discovery#Scan Network range|Scan Network range]]
-					- [[#Note:|Note:]]
 	- [[#Host Discovery#Scan an IP list|Scan an IP list]]
 	- [[#Host Discovery#Scan Multiple IPs|Scan Multiple IPs]]
 	- [[#Host Discovery#Scan Single IP|Scan Single IP]]
@@ -15,7 +14,25 @@
 	- [[#Host and Port Scanning#Discovering Open UDP Ports|Discovering Open UDP Ports]]
 - [[#Saving the Results|Saving the Results]]
 	- [[#Saving the Results#Different Formats|Different Formats]]
-
+- [[#Service Enumeration|Service Enumeration]]
+	- [[#Service Enumeration#Service Version Detection|Service Version Detection]]
+	- [[#Service Enumeration#Banner Grabbing|Banner Grabbing]]
+- [[#Nmap Scripting Engine|Nmap Scripting Engine]]
+- [[#Performance|Performance]]
+	- [[#Performance#Timeouts|Timeouts]]
+	- [[#Performance#Max Retries|Max Retries]]
+	- [[#Performance#Rates|Rates]]
+	- [[#Performance#Timing|Timing]]
+- [[#Firewall and IDS/IPS Evasion|Firewall and IDS/IPS Evasion]]
+	- [[#Firewall and IDS/IPS Evasion#Firewalls|Firewalls]]
+	- [[#Firewall and IDS/IPS Evasion#IDS/IPS|IDS/IPS]]
+	- [[#Firewall and IDS/IPS Evasion#Determine Firewalls and Their Rules|Determine Firewalls and Their Rules]]
+	- [[#Firewall and IDS/IPS Evasion#Detect IDS/IPS|Detect IDS/IPS]]
+	- [[#Firewall and IDS/IPS Evasion#Decoys|Decoys]]
+	- [[#Firewall and IDS/IPS Evasion#DNS Proxying|DNS Proxying]]
+- [[#Easy Lab|Easy Lab]]
+- [[#Medium Lab|Medium Lab]]
+- [[#Hard Lab|Hard Lab]]
 
 # Introduction to Nmap
 ---
@@ -63,7 +80,6 @@ If the IPs are next to each other we can define a range in the respective octet.
 ## Scan Single IP
 Before scanning a host for open ports and its services, we first check if its alive or not. We can use same method as before. 
 `sudo nmap 10.129.2.18 -sn -oA host `
-However we change the output option to output the results in the host format. `-oA host` instead of `-oA tnet`. 
 
 By disabling port scan(`-sn`), Nmap automatically will ping scan with ICMP echo requests. To ensure ICMP echo requests are sent we can use the `-PE` option. We can also use the `--reason` to display the reason for a specific result. Using `--packet-trace` we can show all packets sent and received to inspect more closely. A common result happens when before the ICMP echo request can be sent, an ARP request is sent and a reply is received, thus Nmap determines the IP as alive. We can disable ARP requests using `--disable-arp-ping`. 
 
@@ -162,4 +178,50 @@ These templates contain options that we can also set manually, and have seen som
 ## Firewalls
 A firewall is a security measure against unauthorized connection attempts from external networks. Every firewall security system is based on a software component that monitors network traffic between the firewall and incoming data connections and decides how to handle the connection based on the rules that have been set. It checks whether individual network packets are being passed, ignored, or blocked. This mechanism is designed to prevent unwanted connections that could be potentially dangerous.
 ## IDS/IPS
-Like the firewall, the intrusion detection system (`IDS`) and intrusion prevention system (`IPS`) are also software-based components. `IDS` scans the network for potential attacks, analyzes them, and reports any detected attacks. `IPS` complements `IDS` by taking specific defensive measures if a potential attack should have been detected. The analysis of such attacks is based on pattern matching and signatures. If specific patterns are detected, such as a service detection scan, `IPS` may prevent the pending connection attempts.
+Like the firewall, the intrusion detection system (`IDS`) and intrusion prevention system (`IPS`) are also software-based components. `IDS` scans the network for potential attacks, analyzes them, and reports any detected attacks. `IPS` complements `IDS` by taking specific defensive measures if a potential attack should have been detected. The analysis of such attacks is based on pattern matching and signatures. If specific patterns are detected, such as a service detection scan, `IPS`
+may prevent the pending connection attempts.
+## Determine Firewalls and Their Rules
+
+We already know that when a port is shown as filtered, it can have several reasons. In most cases, firewalls have certain rules set to handle specific connections. The packets can either be `dropped`, or `rejected`. The `dropped` packets are ignored, and no response is returned from the host.
+
+This is different for `rejected` packets that are returned with an `RST` flag. These packets contain different types of ICMP error codes or contain nothing at all. Such errors can be:
+- Net Unreachable
+- Net Prohibited
+- Host Unreachable
+- Host Prohibited
+- Port Unreachable
+- Proto Unreachable
+Nmap's TCP ACK scan (`-sA`) method is much harder to filter for firewalls and IDS/IPS systems than regular SYN (`-sS`) or Connect scans (`sT`) because they only send a TCP packet with only the `ACK`
+flag. When a port is closed or open, the host must respond with an `RST` flag. Unlike outgoing connections, all connection attempts (with the `SYN` flag) from external networks are usually blocked by firewalls. However, the packets with the `ACK` flag are often passed by the firewall because the firewall cannot determine whether the connection was first established from the external network or the internal network. Example ACK scan:
+`sudo nmap 10.129.2.28 -p 21,22,25 -sA -Pn -n --disable-arp-ping --packet-trace`
+## Detect IDS/IPS
+Unlike firewalls and their rules, the detection of IDS/IPS systems is much more difficult because these are passive traffic monitoring systems. `IDS systems` examine all connections between hosts. If the IDS finds packets containing the defined contents or specifications, the administrator is notified and takes appropriate action in the worst case. `IPS systems` take measures configured by the administrator independently to prevent potential attacks automatically. It is essential to know that IDS and IPS are different applications and that IPS serves as a complement to IDS.
+
+Several virtual private servers (`VPS`) with different IP addresses are recommended to determine whether such systems are on the target network during a penetration test. If the administrator detects such a potential attack on the target network, the first step is to block the IP address from which the potential attack comes. As a result, we will no longer be able to access the network using that IP address, and our Internet Service Provider (`ISP`) will be contacted and blocked from all access to the Internet.
+- `IDS systems` alone are usually there to help administrators detect potential attacks on their network. They can then decide how to handle such connections. We can trigger certain security measures from an administrator, for example, by aggressively scanning a single port and its service. Based on whether specific security measures are taken, we can detect if the network has some monitoring applications or not.
+- One method to determine whether such `IPS system` is present in the target network is to scan from a single host (`VPS`). If at any time this host is blocked and has no access to the target network, we know that the administrator has taken some security measures. Accordingly, we can continue our penetration test with another `VPS`.
+
+Consequently, we know that we need to be quieter with our scans and, in the best case, disguise all interactions with the target network and its services.
+## Decoys
+There are cases in which administrators block specific subnets from different regions in principle. This prevents any access to the target network. Another example is when IPS should block us. For this reason, the Decoy scanning method (`-D`) is the right choice. With this method, Nmap generates various random IP addresses inserted into the IP header to disguise the origin of the packet sent. With this method, we can generate random (`RND`) a specific number (for example: `5`) of IP addresses separated by a colon (`:`). Our real IP address is then randomly placed between the generated IP addresses. In the next example, our real IP address is therefore placed in the second position. Another critical point is that the decoys must be alive. Otherwise, the service on the target may be unreachable due to SYN-flooding security mechanisms. Example decoy scan:
+`sudo nmap 10.129.2.28 -p 80 -sS -Pn -n --disable-arp-ping --packet-trace -D RND:5`
+
+The spoofed packets are often filtered out by ISPs and routers, even though they come from the same network range. Therefore, we can also specify our VPS servers' IP addresses and use them in combination with "`IP ID`" manipulation in the IP headers to scan the target.
+
+Another scenario would be that only individual subnets would not have access to the server's specific services. So we can also manually specify the source IP address (`-S`) to test if we get better results with this one. Decoys can be used for SYN, ACK, ICMP scans, and OS detection scans. So let us look at such an example and determine which operating system it is most likely to be.
+`sudo nmap 10.129.2.28 -n -Pn -p 445 -O -S 10.129.2.200 -e tun0`
+`-e tun0` sends all requests through the specified (`tun0`) interface.
+## DNS Proxying
+By default, `Nmap` performs a reverse DNS resolution unless otherwise specified to find more important information about our target. These DNS queries are also passed in most cases because the given web server is supposed to be found and visited. The DNS queries are made over the `UDP port 53`. The `TCP port 53` was previously only used for the so-called "`Zone transfers`" between the DNS servers or data transfer larger than 512 bytes. More and more, this is changing due to IPv6 and DNSSEC expansions. These changes cause many DNS requests to be made via TCP port 53.
+
+However, `Nmap` still gives us a way to specify DNS servers ourselves (`--dns-server <ns>,<ns>`). This method could be fundamental to us if we are in a demilitarized zone (`DMZ`). The company's DNS servers are usually more trusted than those from the Internet. So, for example, we could use them to interact with the hosts of the internal network. As another example, we can use `TCP port 53` as a source port (`--source-port`) for our scans. If the administrator uses the firewall to control this port and does not filter IDS/IPS properly, our TCP packets will be trusted and passed through.
+`sudo nmap 10.129.2.28 -p50000 -sS -Pn -n --disable-arp-ping --packet-trace --source-port 53`
+Now that we have found out that the firewall accepts `TCP port 53`, it is very likely that IDS/IPS filters might also be configured much weaker than others. We can test this by trying to connect to this port by using `Netcat`.
+`ncat -nv --source-port 53 10.129.2.28 50000`
+# Easy Lab
+Asks us to find the operating system of the target. I did a fast TCP scan to find open ports and their services and then ran a version scan of said services. In the version, it told me for what OS the service was for and it was for ubuntu.
+# Medium Lab
+Asks us to find the DNS server version of the target. First instinct is to use the `-sV` option to find the version of the DNS port, that being port 53. The port shows up as filtered. I try to run a UDP scan. This shows the port as open. Therefore we use the UDP scan to do a version scan.
+`nmap 10.129.152.147 -p 53 -sU -sV`
+# Hard Lab
+I am tasked to identify the version of the running services. A TDP scan shows 2 open ports, ssh and http. I found the versions of those two using `-sV` option and tried them as answers, wrong. I assume then that one of the filtered ports contains the service we are looking for. I try using the DNS port (53) as the source port and run a SYN scan (`-sS`). This results in a new service called ibm-db2. Since the firewall accepts TCP port 53, it is very likely that the IDS/IPS filters might also be configured in the same way, weaker than others. So we try using Netcat with source port 53 to check the version of the service. This results in the right answer.
