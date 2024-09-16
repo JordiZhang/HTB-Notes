@@ -5,16 +5,24 @@
       "path": "Information Security Foundations/02. Windows Fundamentals.md"
     },
     {
-      "basename": "Network Enumeration with Nmap",
-      "path": "CPTS/Network Enumeration with Nmap.md"
+      "basename": "Pasted image 20240916112032",
+      "path": "ZZImages/Pasted image 20240916112032.png"
     },
     {
       "basename": "01. Linux Fundamentals",
       "path": "Information Security Foundations/01. Linux Fundamentals.md"
     },
     {
+      "basename": "Network Enumeration with Nmap",
+      "path": "CPTS/Network Enumeration with Nmap.md"
+    },
+    {
       "basename": "Configure Prompt",
       "path": "Setting Up/Configure Prompt.md"
+    },
+    {
+      "basename": "README",
+      "path": "README.md"
     },
     {
       "basename": "Start-up List",

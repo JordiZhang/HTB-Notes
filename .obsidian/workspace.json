@@ -13,38 +13,13 @@
             "state": {
               "type": "markdown",
               "state": {
-                "file": "Information Security Foundations/01. Linux Fundamentals.md",
-                "mode": "source",
-                "source": false
-              }
-            }
-          },
-          {
-            "id": "0b4db0bb5e9ac9d0",
-            "type": "leaf",
-            "state": {
-              "type": "markdown",
-              "state": {
-                "file": "CPTS/Network Enumeration with Nmap.md",
-                "mode": "source",
-                "source": false
-              }
-            }
-          },
-          {
-            "id": "dfd4871e843ad2ec",
-            "type": "leaf",
-            "state": {
-              "type": "markdown",
-              "state": {
                 "file": "Information Security Foundations/02. Windows Fundamentals.md",
                 "mode": "source",
                 "source": false
               }
             }
           }
-        ],
-        "currentTab": 2
+        ]
       }
     ],
     "direction": "vertical"
@@ -169,14 +144,21 @@
               "type": "advanced-tables-toolbar",
               "state": {}
             }
+          },
+          {
+            "id": "8a7718dcf3a53a5c",
+            "type": "leaf",
+            "state": {
+              "type": "git-view",
+              "state": {}
+            }
           }
         ],
         "currentTab": 4
       }
     ],
     "direction": "horizontal",
-    "width": 200,
-    "collapsed": true
+    "width": 200
   },
   "left-ribbon": {
     "hiddenItems": {
@@ -186,21 +168,24 @@
       "daily-notes:Open today's daily note": false,
       "templates:Insert template": false,
       "command-palette:Open command palette": false,
-      "table-editor-obsidian:Advanced Tables Toolbar": false
+      "table-editor-obsidian:Advanced Tables Toolbar": false,
+      "obsidian-git:Open Git source control": false
     }
   },
-  "active": "24ebabaf342d1688",
+  "active": "2997d35e6b43985d",
   "lastOpenFiles": [
-    "CPTS/Network Enumeration with Nmap.md",
-    "Information Security Foundations/01. Linux Fundamentals.md",
     "Information Security Foundations/02. Windows Fundamentals.md",
+    "ZZImages/Pasted image 20240916112032.png",
+    "Information Security Foundations/01. Linux Fundamentals.md",
+    "CPTS/Network Enumeration with Nmap.md",
+    "2024-09-13.md",
     "Setting Up/Configure Prompt.md",
+    "README.md",
     "Setting Up/Start-up List.md",
     "Setting Up/Logging.md",
     "Vim.md",
     "Information Security Foundations",
     "CPTS",
-    "README.md",
     "Untitled.canvas",
     "ZZImages",
     "ZZImages/Pasted image 20240826122907.png",
